@@ -1,0 +1,58 @@
+Directory Tree: .\lib
+
+|-- adafruit_bme680.mpy
+|-- adafruit_connection_manager.mpy
+|-- adafruit_datetime.mpy
+|-- adafruit_debug_i2c.mpy
+|-- adafruit_dht.mpy
+|-- adafruit_miniqr.mpy
+|-- adafruit_ntp.mpy
+|-- adafruit_requests.mpy
+|-- adafruit_scd30.mpy
+|-- adafruit_sht31d.mpy
+|-- adafruit_tca8418.mpy
+|-- adafruit_tca9548a.mpy
+|-- adafruit_ticks.mpy
+|-- adafruit_tsl2591.mpy
+|-- adafruit_vl53l1x.mpy
+|-- neopixel.mpy
+|-- simpleio.mpy
+|-- adafruit_bus_device
+|   |-- __init__.py
+|   |-- i2c_device.mpy
+|   +-- spi_device.mpy
+|-- adafruit_httpserver
+|   |-- __init__.mpy
+|   |-- authentication.mpy
+|   |-- exceptions.mpy
+|   |-- headers.mpy
+|   |-- interfaces.mpy
+|   |-- methods.mpy
+|   |-- mime_types.mpy
+|   |-- request.mpy
+|   |-- response.mpy
+|   |-- route.mpy
+|   |-- server.mpy
+|   +-- status.mpy
+|-- adafruit_io
+|   |-- __init__.py
+|   |-- adafruit_io.mpy
+|   +-- adafruit_io_errors.mpy
+|-- adafruit_minimqtt
+|   |-- __init__.py
+|   |-- adafruit_minimqtt.mpy
+|   +-- matcher.mpy
+|-- adafruit_progressbar
+|   |-- __init__.mpy
+|   |-- horizontalprogressbar.mpy
+|   |-- progressbar.mpy
+|   +-- verticalprogressbar.mpy
++-- asyncio
+|   |-- __init__.mpy
+|   |-- core.mpy
+|   |-- event.mpy
+|   |-- funcs.mpy
+|   |-- lock.mpy
+|   |-- stream.mpy
+|   |-- task.mpy
+|   +-- traceback.mpy

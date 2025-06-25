@@ -9,7 +9,8 @@ from devices import device_list
 
 class SHT30Setup:
     def __init__(self, class_object: adafruit_sht31d.SHT31D):
-        pass
+        if class_object.mode != adafruit_sht31d.MODE_SINGLE:
+            class_object.mode = adafruit_sht31d.MODE_SINGLE
 
 
 class SCD30Setup:
@@ -20,8 +21,6 @@ class SCD30Setup:
 class BME680Setup:
     def __init__(self, class_object: adafruit_bme680.Adafruit_BME680_I2C):
         class_object.sea_level_pressure = 1013.25
-
-        pass
 
 
 class TSL2591Setup:

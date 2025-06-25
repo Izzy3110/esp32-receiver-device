@@ -26,11 +26,7 @@ from devices import device_list
 # custom functions & helpers
 from functions import ntp_to_datestr, scan_i2c, load_devices, \
                       get_timezone_value_by_timezone_str, \
-                      setup_devices
-
-
-def str_to_class(obj, classname):
-    return getattr(obj, classname)
+                      setup_devices, str_to_class
 
 
 # device debug-variables

@@ -117,17 +117,30 @@ JSON_POST_URL = f"{web_server}{web_post_endpoint}"
 # init i2c
 i2c = board.STEMMA_I2C()
 
-mux = adafruit_tca9548a.PCA9546A(i2c)
+mux_channel_num = 8
 
-channels = {
-    "0": [],
-    "1": [],
-    "2": [],
-    "3": [],
+# Define a mapping from channel count to class
+mux_classes = {
+    4: adafruit_tca9548a.PCA9546A,
+    8: adafruit_tca9548a.TCA9548A
 }
 
+# Get the correct class
+mux_class = mux_classes.get(mux_channel_num)
+
+# Check if class is valid
+if mux_class is None:
+    raise ValueError(f"Unsupported mux_channel_num: {mux_channel_num}")
+
+# Instantiate the multiplexer
+mux = mux_class(i2c)
+
+channels = {}
+for i in range(mux_channel_num):
+    channels[str(i)] = []
+
 address_to_sensor = {
-    "0x29": "tsl2591",
+    "0x29": "tsl2591,vl53l1x",
     "0x61": "scd30",
     "0x44": "sht30",
     "0x77": "bme680"
@@ -135,7 +148,7 @@ address_to_sensor = {
 
 sensor_at_channel = {}
 
-for channel in range(4):
+for channel in range(mux_channel_num):
     if mux[channel].try_lock():
         addresses = mux[channel].scan()
         for address in addresses:
@@ -145,9 +158,13 @@ for channel in range(4):
 
             if hex_addr not in channels[str(channel)]:
                 sensor_name = address_to_sensor.get(hex_addr)
-                if sensor_name:
+                if "," in sensor_name:
+                    sensor_name = sensor_name.split(",")
+                if isinstance(sensor_name, str):
                     # print(f"channel {channel}: {sensor_name}")
                     sensor_at_channel[str(channel)] = sensor_name
+                if isinstance(sensor_name, list):
+                    sensor_at_channel[str(channel)] = sensor_name[0]
                 # else:
                 #    print(f"channel {channel}: unknown sensor at {hex_addr}")
 
@@ -161,8 +178,34 @@ for channel in range(4):
 failed = []
 class_collection = []
 
-debug_load_devices = False
+debug_load_devices = True
 debug_setup_devices = False
+
+for dev_name, dev_data in device_list.items():
+    # print(f"sensor: {dev_name}")
+    # print(dev_data)
+    lib_name = dev_data["import_name"]
+    # print(lib_name)
+    if debug_load_devices:
+        print("\n")
+        print(f">> DEBUG | load_device classes: importing: {lib_name}")
+
+    import_name = dev_data.get('import_name')
+    class_name = dev_data.get('class_name')
+
+    # create class_type str from devive_object dict
+    class_type = f"{import_name}.{class_name}"
+    # print(f"class_type: {class_type}")
+
+    cls_: class_type = None
+
+    # -- replacing load_devices
+    devices.append({
+        dev_name: __import__(lib_name),
+        "import_name": import_name,
+        "class_name": class_name,
+        "class_type": class_type
+    })
 
 for channel, sensor in sensor_at_channel.items():
     # print(f"channel: {channel}")
@@ -170,14 +213,6 @@ for channel, sensor in sensor_at_channel.items():
 
     for dev_name, dev_data in device_list.items():
         if dev_name == sensor:
-            # print(f"sensor: {dev_name}")
-            # print(dev_data)
-            lib_name = dev_data["import_name"]
-            # print(lib_name)
-            if debug_load_devices:
-                print("\n")
-                print(f">> DEBUG | load_devices: importing: {lib_name}")
-
             import_name = dev_data.get('import_name')
             class_name = dev_data.get('class_name')
 
@@ -186,14 +221,6 @@ for channel, sensor in sensor_at_channel.items():
             # print(f"class_type: {class_type}")
 
             cls_: class_type = None
-
-            # -- replacing load_devices
-            devices.append({
-                dev_name: __import__(lib_name),
-                "import_name": import_name,
-                "class_name": class_name,
-                "class_type": class_type
-            })
 
             device_module = None
             try:
@@ -509,7 +536,6 @@ async def monitor_sensors():
                             module_class.gain = adafruit_tsl2591.GAIN_LOW
 
         await async_sleep(3)
-
 
 
 async def main():

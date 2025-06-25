@@ -1,0 +1,8 @@
+# Comments are supported
+CIRCUITPY_WIFI_SSID = ""
+CIRCUITPY_WIFI_PASSWORD = ""
+CIRCUITPY_WEB_API_PORT = 80
+CIRCUITPY_WEB_API_PASSWORD = "passw0rd"
+test_variable = "this is a test"
+thumbs_up = "\U0001f44d"
+DEVICE_ID = "df28a0c0-a8a5-4970-b2d8-b882b1bec1fc"

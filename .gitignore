@@ -192,3 +192,13 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+System Volume Information/
+sd/
+debian-vm01.wyl-online.de+5.pem
+debian-vm01.wyl-online.de+5-key.pem
+boot_out.txt
+.Trashes
+.Trash-1000
+.metadata_never_index
+.fseventsd/
+settings.toml
